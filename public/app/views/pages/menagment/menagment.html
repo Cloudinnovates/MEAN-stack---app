@@ -1,0 +1,116 @@
+<div class="page-header">
+	<h3>Managment</h3>
+</div>
+<br/>
+
+
+<!-- loading icon -->
+<div class="jumbtoron text-center" ng-show="managment.loading">
+	<span class="glyphicon glyphicon-repeat spinner"></span>
+	<p>Loading...</p>
+</div>
+<br/>
+
+<button type="button" ng-click="managment.showMore(number)" class="btn btn-success">Apply Filter</button>
+<button type="button" ng-click="managment.showAll()" class="btn btn-warning">Show all</button>
+<div class="show-more">
+	<div class="col-lg-6">
+		<div class="input-group">
+			<span class="input-group-addon">
+				Result to display:
+			</span>
+			<input type="text" class="form-control" ng-model="number" >
+		</div>
+	</div>
+</div>
+<br/>
+<br/>
+
+<!-- search form -->
+<div class="navbar-form">
+	<input type="text" name="searchKeyword" ng-model="searchKeyword" class="form-control">
+	<button type="button" class="btn" ng-click="managment.search(searchKeyword, number)" >Search</button>
+	<button type="button" class="btn" ng-click="managment.clearSearch()">Clear</button>
+	<button type="button" class="btn">Advanced Search</button>
+</div>
+<br/>
+
+
+<!-- display search result -->
+<div ng-show="searchFilter !== undefined">
+	<strong>Total result: </strong>
+	<p>{{ (managment.users | filter: searchFilter).length }}</p>
+</div>
+
+<div ng-show="searchFilter !== undefined">
+	<strong>Showing: </strong>
+	<p>{{ (managment.users | filter: searchFilter | limitTo: managment.limit).length }}</p>
+</div>
+
+<!-- sort by: asc or desc -->
+<div>
+	<strong>Sort by:</strong>
+	<select ng-model="sortColumn" >
+		<option value="name">Name ASC</option>
+		<option value="-name">Name DESC</option>
+		<option value="username">Username ASC</option>
+		<option value="-username">Username DESC</option>
+		<option value="email">E-mail ASC</option>
+		<option value="-email">E-mail DESC</option>
+	</select>
+</div>
+
+
+<!-- custom error message -->
+<div class="row show-hide-message" ng-show="managment.showMoreError">
+	<div class="alert alert-danger">{{managment.showMoreError}} 
+	</div>
+</div>
+<br/>
+
+<!-- panel with user dipslay -->
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<strong>User Menagment</strong>
+	</div>
+	<table class="table">
+		<tr>
+			<th>Name</th>
+			<th>Username</th>
+			<th>E-mail</th>
+		</tr>
+		<tr ng-repeat="person in managment.users | filter: searchFilter | limitTo: managment.limit | orderBy: sortColumn">
+			<td>{{ person.name }}</td>
+			<td>{{ person.username }}</td>
+			<td>{{ person.email }}</td>
+			<td>
+				<a href="/edit/{{ person._id }}">
+					<button type="button" ng-show="managment.editAccess" class="btn btn-primary">Edit</button>
+				</a>
+				<button type="button" ng-click="managment.deleteUser(person.username)" ng-show="managment.deleteAccess" class="btn btn-danger">Delete</button>
+
+			</td>
+		</tr>
+	</table>
+</div>
+
+<br/>
+
+<!-- search box -->
+<div ng-show="managment.limit > 2">
+	<button type="button" ng-click="managment.showMore(number)" class="btn btn-success">Apply Filter</button>
+	<button type="button" ng-click="managment.showAll()" class="btn btn-warning">Show all</button>
+	<div class="show-more">
+		<div class="col-lg-6">
+			<div class="input-group">
+				<span class="input-group-addon">
+					Result to display:
+				</span>
+				<input type="text" class="form-control" ng-model="number" >
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
