@@ -12,6 +12,7 @@ angular.module('userController', ['userService'])
 		app.disabled = true;
 
 		if (valid) {
+			// function create user
 			User.create(app.regData).then(function(data) {
 				if(data.data.success) {
 					app.successMsg = data.data.message;
@@ -33,13 +34,13 @@ angular.module('userController', ['userService'])
 		}
 		
 	};
-
+	
 	this.checkUsername = function(regData) {
-		
+		// function that checks if useranem already exists
 		User.checkUsername(app.regData).then(function(data) {
 			app.invalidUsername  = true;
 			app.usernameMsg = false;
-			console.log(data.data.message);
+
 			if (data.data.success) {
 				app.invalidUsername  = false;
 				app.usernameMsg = data.data.message;
@@ -49,9 +50,9 @@ angular.module('userController', ['userService'])
 			}
 		});
 	};
-
+	
 	this.checkEmail = function(regData) {
-		
+		// function that checks if mail already exists
 		User.checkEmail(app.regData).then(function(data) {
 			app.invalidEmail = true;
 			app.emailMsg = false;
@@ -67,7 +68,7 @@ angular.module('userController', ['userService'])
 	};
 	
 })
-
+// custom directive for compare password
 .directive('match', function() {
 	return {
 		restict: 'A',

@@ -150,7 +150,7 @@ angular.module('mainController', ['authenticateService'])
 					app.errorMsg = data.data.message;
 				} else {
 					app.loading  = false;
-					app.disabled = true;
+					app.disabled = false;
 					app.errorMsg = data.data.message;
 				}
 			}

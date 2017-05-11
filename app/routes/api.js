@@ -113,19 +113,31 @@ module.exports = function(router) {
 		User.findOne({ username: req.body.username }).select('username password email active').exec(function(err, user) {
 			if (err)  throw err;
 
-			if (!user) {
-				res.json({ success: false, message: 'Could not authenticate user' });
-			} else if (user) {
-				var validPassword = user.comparePassword(req.body.password);
-				if (!validPassword) {
-					res.json({ success: false, message: 'Could not authenticate the password'});
-				} else if (!user.active) { 
-					res.json({ success: false, message: 'Please check your e-mail for activation link', expired : true });
-				}else {
-					var token = jwt.sign({ username: user.username, email: user.email}, secret, { expiresIn: '24h' });
-					res.json({ success: true, message: 'User authenticated', token : token});
-				}
-			}			
+	 	 	if (!req.body.username && !req.body.password) {
+	 	 		res.json({ success: false, message: 'Please fill in all fields!' });
+	 	 	} else {
+	 	 		if (!req.body.username) {
+	 	 			res.json({ success: false, message: 'Please fill in username.' });
+	 	 		} else if (!req.body.password) {
+	 	 			res.json({ success: false, message: 'Please fill in password.' });
+	 	 		} else {
+	 	 			if (!user) {
+	 	 				res.json({ success: false, message: 'Could not authenticate user!' });
+	 	 			} else if (user) {
+		 				var validPassword = user.comparePassword(req.body.password);
+
+	 					if (!validPassword) {
+	 					res.json({ success: false, message: 'Could not authenticate password!' });
+		 				} else if (!user.active) {
+		 					res.json({ success: false, message: 'Please check your e-mail for activation link', expired : true });
+		 				} else {
+		 				var token = jwt.sign({ username: user.username, email: user.email}, secret, { expiresIn: '24h' });
+						res.json({ success: true, message: 'User authenticated', token : token});
+			 			}
+	 	 			} 
+	 	 		}
+	
+	 	 	};		
 		});		
 	});
 
